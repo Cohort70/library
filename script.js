@@ -5,8 +5,7 @@ addBook.onclick = function () {
         const book = new Book(isbn.value, title.value, author.value, year.value);
         library.push(book);
         const li = document.createElement('li');
-        const btnDel = createButtonDel();
-        btnDel.addEventListener("click", () => {
+        const btnDel = createButtonDel(() => {
             const index = findBook(library, book.isbn);
             library.splice(index, 1);
         });
