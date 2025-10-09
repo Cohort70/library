@@ -1,12 +1,12 @@
 const library = [];
 
 addBook.onclick = function () {
-    if (library.findIndex(b => b.isbn === isbn.value) === -1) {
+    if (library.findIndex(({isbn}) => isbn === isbn.value) === -1) {
         const book = new Book(isbn.value, title.value, author.value, year.value);
         library.push(book);
         const li = document.createElement('li');
         const btnDel = createButtonDel(() => {
-            const index = library.findIndex(b => b.isbn === book.isbn);
+            const index = library.findIndex(({isbn}) => isbn === book.isbn);
             library.splice(index, 1);
             showStats();
         });
@@ -22,11 +22,10 @@ addBook.onclick = function () {
 function showStats() {
     const divStats = document.createElement('div')
     if (library.length) {
-        let year = library.reduce((min, b) => b.year < min ? b.year : min, library[0].year);
-        const h3min = createInfoElement(`Min year: ${year}`, 'h3');
-        year = library.reduce((max, b) => b.year > max ? b.year : max, library[0].year);
-        const h3max = createInfoElement(`Max year: ${year}`, 'h3');
-        year = library.reduce((sum, b) => sum + b.year, 0) / library.length;
+        const years = library.map(b => b.year);
+        const h3min = createInfoElement(`Min year: ${Math.min(...years)}`, 'h3');
+        const h3max = createInfoElement(`Max year: ${Math.max(...years)}`, 'h3');
+        let year = years.reduce((sum, y) => sum + y, 0) / years.length;
         const h3avg = createInfoElement(`Average year: ${year}`, 'h3');
         const total = createInfoElement(`Total books ${library.length}`, 'h3');
         divStats.append(total, h3min, h3max, h3avg);
